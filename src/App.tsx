@@ -1,17 +1,21 @@
 import './assets/App.css'
+import AboutUs from './components/AboutUs'
+import ContactUs from './components/ContactUs'
+import Footer from './components/Footer'
+import GallerySection from './components/GallerySection'
 import HeroSection from './components/HeroSection'
 
 function App() {
-
   return (
-    <>
-      <div className="min-h-[200vh]">
-        <HeroSection />
+    <main className='relative w-full flex flex-col items-center'>
+      <HeroSection />
+      <div className='relative z-10 mt-[1000vh] w-full'>
+        <AboutUs />
+        <GallerySection />
+        <ContactUs />
+        <Footer />
       </div>
-      <div className='min-h-[100vh] w-full'>
-        <h1 className='text-blue-500'> About Us</h1>
-      </div>
-    </>
+    </main>
   )
 }
 
