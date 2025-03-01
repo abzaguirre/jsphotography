@@ -26,11 +26,7 @@ const Index = () => {
         hidden: { opacity: 0 },
         visible: (i: number) => ({
             opacity: 1,
-            transition: {
-                delay: 1.8 + (i * 0.1),
-                duration: 0.6,
-                ease: [0.43, 0.13, 0.23, 0.96]
-            }
+            transition: { delay: 0.5 + i * 0.1, duration: 0.5 }
         })
     };
 
@@ -46,15 +42,15 @@ const Index = () => {
                     isInView={isInView}
                 />
                 <AnimatedLine
-                    delay={0.8}
+                    delay={0.2}
                     direction="diagonal-right"
                     className="absolute -top-10 -left-10 h-48 bg-gray-400"
                     isInView={isInView}
                 />
                 <AnimatedLine
-                    delay={0.8}
+                    delay={0.2}
                     direction="diagonal-left"
-                    className="absolute top-60 right-0 w-40 bg-gray-400" 
+                    className="absolute top-60 right-0 w-40 bg-gray-400"
                     isInView={isInView}
                 />
                 {/* Decorative circle */}
