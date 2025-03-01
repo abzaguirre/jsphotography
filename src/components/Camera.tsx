@@ -3,20 +3,24 @@ import cameraImage from "../assets/images/camera.png";
 
 const Camera = () => {
   const { scrollYProgress } = useScroll();
-  // Rising effect for the camera (emerging from box)
-  const cameraY = useTransform(scrollYProgress, [0, 0.3], [10, -150]);
-  const circleY = useTransform(scrollYProgress, [0, 0.3, 0.6], [50, -120, -400]);
-  const circleX = useTransform(scrollYProgress, [0, 0.3], [-38.5, -38.5]);
-  // Zoom effect - FASTER now (0.3 to 0.6 instead of 0.3 to 0.9)
-  const scale = useTransform(scrollYProgress, [0.3, 0.6], [1, 20]); // Increased max scale and shortened duration
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.31, 0.6], [0, 0, 0.5, 0]); // Shortened fade out
-  // Dynamic z-index
-  const zIndex = useTransform(scrollYProgress, [0, 0.3], [10, 60]);
-  // Circle grows in size - FASTER now
-  const size = useTransform(scrollYProgress, [0.3, 0.6], [20, 800]); // Increased max size and shortened duration
-  // Move the box out of view faster
-  const boxY = useTransform(scrollYProgress, [0.3, 0.6], [0, -700]); // Moves up faster
-  
+  // Rising effect for the camera - NORMAL SPEED (matching zoom effect)
+  const cameraY = useTransform(scrollYProgress, [0, 0.15], [10, -150]);
+  const circleY = useTransform(scrollYProgress, [0, 0.15, 0.45], [50, -120, -400]);
+  const circleX = useTransform(scrollYProgress, [0, 0.15], [-38.5, -38.5]);
+
+  // Zoom effect - SLOWED DOWN (0.15-0.45 instead of 0.15-0.3)
+  const scale = useTransform(scrollYProgress, [0.15, 0.45], [1, 20]);
+  const opacity = useTransform(scrollYProgress, [0, 0.15, 0.16, 0.45], [0, 0, 0.5, 0]);
+
+  // Dynamic z-index - NORMAL SPEED (matching rising effect)
+  const zIndex = useTransform(scrollYProgress, [0, 0.15], [10, 60]);
+
+  // Circle grows in size - SLOWED DOWN to match zoom effect
+  const size = useTransform(scrollYProgress, [0.15, 0.45], [20, 800]);
+
+  // Move the box out of view - SLOWED DOWN to match zoom effect
+  const boxY = useTransform(scrollYProgress, [0.15, 0.45], [0, -700]);
+
   return (
     <>
       {/* Box that moves out of view while zooming */}

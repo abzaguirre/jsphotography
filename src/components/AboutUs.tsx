@@ -4,7 +4,6 @@ import AnimatedLine from "../components/AnimatedLine";
 
 const Index = () => {
     const ref = useRef(null);
-    // Change to { once: false } to allow the animation to restart
     const isInView = useInView(ref, { once: false, margin: "-100px" });
     const [translateValues, setTranslateValues] = useState(["-60vw", "-25vw"]);
 
@@ -34,6 +33,7 @@ const Index = () => {
             }
         })
     };
+
     return (
         <div className="min-h-screen overflow-hidden">
             <motion.section
@@ -54,7 +54,7 @@ const Index = () => {
                 <AnimatedLine
                     delay={0.8}
                     direction="diagonal-left"
-                    className="absolute top-60 right-0 w-40 bg-gray-400"
+                    className="absolute top-60 right-0 w-40 bg-gray-400" 
                     isInView={isInView}
                 />
                 {/* Decorative circle */}
