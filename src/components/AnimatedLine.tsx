@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
+import { useEffect } from "react";
 
 interface AnimatedLineProps {
   delay?: number;
@@ -15,6 +16,15 @@ const AnimatedLine = ({
   direction = "horizontal",
   isInView = false
 }: AnimatedLineProps) => {
+  const controls = useAnimation();
+  
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    } else {
+      controls.start("hidden");
+    }
+  }, [isInView, controls]);
   
   const getLineStyles = () => {
     switch (direction) {
@@ -54,7 +64,7 @@ const AnimatedLine = ({
     <motion.div
       className={`bg-black ${getLineStyles()} ${className}`}
       initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
+      animate={controls}
       variants={variants}
       transition={{ 
         duration, 
