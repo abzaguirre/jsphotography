@@ -62,7 +62,7 @@ const AnimatedLine = ({
 
   return (
     <motion.div
-      className={`bg-black ${getLineStyles()} ${className}`}
+      className={`bg-black ${getLineStyles()} ${className} -z-10`}
       initial="hidden"
       animate={controls}
       variants={variants}

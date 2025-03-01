@@ -143,22 +143,7 @@ export default function GallerySection() {
                         </motion.div>
                     ))}
                 </motion.div>
-                <div className="flex gap-4 md:flex-nowrap flex-wrap">
-                    {Array(3).fill("").map((_, index) => (
-                        <div key={index} className="relative overflow-hidden rounded-lg group">
-                            <img
-                                src={hero}
-                                alt="hehehe"
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            />
-                            <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-55 transition-opacity duration-300 flex items-end">
-                                <p className="text-white p-4 text-sm md:text-base font-medium">
-                                    hehehe
-                                </p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+             
             </div>
         </motion.section>
     );
