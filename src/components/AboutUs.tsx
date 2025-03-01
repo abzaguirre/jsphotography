@@ -4,7 +4,8 @@ import AnimatedLine from "../components/AnimatedLine";
 
 const Index = () => {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
+    // Change to { once: false } to allow the animation to restart
+    const isInView = useInView(ref, { once: false, margin: "-100px" });
     const [translateValues, setTranslateValues] = useState(["-60vw", "-25vw"]);
 
     useEffect(() => {
@@ -33,7 +34,6 @@ const Index = () => {
             }
         })
     };
-
     return (
         <div className="min-h-screen overflow-hidden">
             <motion.section
