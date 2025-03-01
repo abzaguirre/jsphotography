@@ -9,7 +9,7 @@ function App() {
   return (
     <main className='relative w-full flex flex-col items-center'>
       <HeroSection />
-      <div className='relative z-10 mt-[1000vh] w-full'>
+      <div className='relative z-10 mt-[400vh] w-full'>
         <AboutUs />
         <GallerySection />
         <ContactUs />
