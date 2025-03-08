@@ -1,84 +1,21 @@
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
-import hero from '../assets/images/hero_img.jpg'
+import { useState, useRef } from "react";
+import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import ImageCarousel from "./ImageCarousel";
+import { galleryImages } from "../constants/gallery";
 
-const galleryImages = [
-    {
-        src: "https://drive.google.com/thumbnail?id=1cG-LTBEgIKdT8rNx477hiV7mdBwKh1K-&sz=w1000",
-        alt: "Person typing on laptop",
-        className: "row-span-2" // Vertical rectangle (tall)
-    },
-    {
-        src: hero,
-        alt: "Computer tech",
-        className: "" // Square
-    },
-    {
-        src: hero,
-        alt: "Person working on laptop",
-        className: "row-span-2" // Vertical rectangle (tall)
-    },
-    {
-        src: hero,
-        alt: "Robot",
-        className: "" // Square
-    },
-    {
-        src: hero,
-        alt: "Digital code",
-        className: "col-span-2" // Horizontal rectangle (wide)
-    },
-    {
-        src: hero,
-        alt: "Cat",
-        className: "row-span-2" // Vertical rectangle (tall)
-    },
-    {
-        src: hero,
-        alt: "Person in tech workspace",
-        className: "" // Square
-    },
-    {
-        src: hero,
-        alt: "Glowing tech",
-        className: "" // Square
-    },
-    {
-        src: hero,
-        alt: "Person typing on laptop",
-        className: "row-span-2" // Vertical rectangle (tall)
-    },
-    {
-        src: hero,
-        alt: "Computer tech",
-        className: "" // Square
-    },
-    {
-        src: hero,
-        alt: "Person working on laptop",
-        className: "row-span-2" // Vertical rectangle (tall)
-    },
-    {
-        src: hero,
-        alt: "Robot",
-        className: "" // Square
-    },
-    {
-        src: hero,
-        alt: "Robot",
-        className: "" // Square
-    },
-];
-
-
-export default function GallerySection() {
+const GallerySection = () => {
     const ref = useRef(null);
+    const [carouselOpen, setCarouselOpen] = useState(false);
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
     const { scrollYProgress } = useScroll({
         target: ref,
         offset: ["start end", "end start"]
     });
 
     const isInView = useInView(ref, { once: true, amount: 0.2 });
+    const opacity = useTransform(scrollYProgress, [0, 0.2, 1], [0, 1, 1]);
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -88,6 +25,7 @@ export default function GallerySection() {
             }
         }
     };
+
     const itemVariants = {
         hidden: { opacity: 0, y: 20 },
         visible: {
@@ -99,52 +37,105 @@ export default function GallerySection() {
             }
         }
     };
-    const opacity = useTransform(scrollYProgress, [0, 0.2, 1], [0, 1, 1]);
+
+    const handleImageClick = (index: number) => {
+        setSelectedImageIndex(index);
+        setCarouselOpen(true);
+    };
+
     return (
         <motion.section
             ref={ref}
-            className="relative min-h-screen flex flex-col items-center justify-center"
+            className="relative min-h-screen flex flex-col items-center justify-center px-4 py-16"
             style={{ opacity }}
         >
-            <div className="max-w-8xl mx-4 mt-5">
-                <motion.h2
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                    className="text-5xl md:text-5xl font-bold mb-8 text-center"
-                >
-                    Gallery
-                </motion.h2>
+            <div className="w-full mx-auto">
+                <div className="mb-12">
+                    <motion.span
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground mb-3"
+                    >
+                        Our Collections
+                    </motion.span>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="text-4xl md:text-5xl font-bold leading-tight tracking-tight"
+                    >
+                        Gallery
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.3 }}
+                        className="text-muted-foreground mt-3 max-w-2xl"
+                    >
+                        Explore our curated collection. Click on any image to view in detail.
+                    </motion.p>
+                </div>
 
                 <motion.div
                     variants={containerVariants}
                     initial="hidden"
                     animate={isInView ? "visible" : "hidden"}
-                    className="grid grid-cols-2 md:grid-cols-4 gap-4"
+                    className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
                 >
                     {galleryImages.map((image, index) => (
                         <motion.div
                             key={index}
                             variants={itemVariants}
-                            className={`relative overflow-hidden rounded-lg ${image.className}`}
+                            className={`relative overflow-hidden rounded-xl ${image.className} cursor-pointer group`}
+                            onClick={() => handleImageClick(index)}
+                            whileHover={{ y: -5 }}
+                            whileTap={{ scale: 0.98 }}
                         >
-                            <motion.img
-                                src={image.src}
-                                alt={image.alt}
-                                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                            />
                             <motion.div
-                                className="absolute inset-0 bg-black bg-opacity-20 opacity-0 hover:opacity-65 transition-opacity duration-300 flex items-end"
+                                className="w-full h-full aspect-square overflow-hidden bg-muted"
+                                whileHover="hover"
                             >
-                                <p className="text-white p-4 text-sm md:text-base font-medium">
-                                    {image.alt}
-                                </p>
+                                <motion.img
+                                    src={image.src}
+                                    alt={image.alt}
+                                    className="w-full h-full object-cover transition-transform duration-1000"
+                                    initial={{ scale: 1.01 }}
+                                    whileHover={{ scale: 1.08 }}
+                                    loading="lazy"
+                                />
+                                <motion.div
+                                    className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end"
+                                    initial={{ opacity: 0 }}
+                                    whileHover={{ opacity: 1 }}
+                                >
+                                    <div className="p-4 text-white bg-gradient-to-t from-black/60 to-transparent w-full">
+                                        <p className="font-medium text-sm md:text-base">
+                                            {image.alt}
+                                        </p>
+                                        <p className="text-xs text-white/80 mt-1">
+                                            Click to view
+                                        </p>
+                                    </div>
+                                </motion.div>
                             </motion.div>
                         </motion.div>
                     ))}
                 </motion.div>
-             
             </div>
+
+            <AnimatePresence>
+                {carouselOpen && (
+                    <ImageCarousel
+                        images={galleryImages}
+                        initialIndex={selectedImageIndex}
+                        isOpen={carouselOpen}
+                        onClose={() => setCarouselOpen(false)}
+                    />
+                )}
+            </AnimatePresence>
         </motion.section>
     );
-}
+};
+
+export default GallerySection;
