@@ -71,7 +71,7 @@ const GallerySection = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.3 }}
-                        className="text-muted-foreground mt-3 max-w-2xl"
+                        className="text-muted-foreground mt-3 max-w-2xl text-left"
                     >
                         Explore our curated collection. Click on any image to view in detail.
                     </motion.p>
@@ -100,8 +100,6 @@ const GallerySection = () => {
                                     src={image.src}
                                     alt={image.alt}
                                     className="w-full h-full object-cover transition-transform duration-1000"
-                                    initial={{ scale: 1.01 }}
-                                    whileHover={{ scale: 1.08 }}
                                     loading="lazy"
                                 />
                                 <motion.div

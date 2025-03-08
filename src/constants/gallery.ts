@@ -25,7 +25,7 @@ export const galleryImages = [
     {
         src: hero,
         alt: "Digital code",
-        className: "col-span-2" // Horizontal rectangle (wide)
+        className: "row-span-1" // Horizontal rectangle (wide)
     },
     {
         src: hero,
