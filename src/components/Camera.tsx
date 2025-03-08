@@ -3,23 +3,24 @@ import cameraImage from "../assets/images/camera.png";
 
 const Camera = () => {
   const { scrollYProgress } = useScroll();
-  // Rising effect for the camera - NORMAL SPEED (matching zoom effect)
-  const cameraY = useTransform(scrollYProgress, [0, 0.15], [10, -150]);
-  const circleY = useTransform(scrollYProgress, [0, 0.15, 0.45], [50, -120, -400]);
-  const circleX = useTransform(scrollYProgress, [0, 0.15], [-38.5, -38.5]);
+  
+  // Rising effect for the camera - FASTER SPEED
+  const cameraY = useTransform(scrollYProgress, [0, 0.12], [10, -150]);
+  const circleY = useTransform(scrollYProgress, [0, 0.12, 0.35], [50, -120, -400]);
+  const circleX = useTransform(scrollYProgress, [0, 0.12], [-38.5, -38.5]);
 
-  // Zoom effect - SLOWED DOWN (0.15-0.45 instead of 0.15-0.3)
-  const scale = useTransform(scrollYProgress, [0.15, 0.45], [1, 20]);
-  const opacity = useTransform(scrollYProgress, [0, 0.15, 0.16, 0.45], [0, 0, 0.5, 0]);
+  // Zoom effect - FASTER SPEED
+  const scale = useTransform(scrollYProgress, [0.12, 0.35], [1, 20]);
+  const opacity = useTransform(scrollYProgress, [0, 0.12, 0.13, 0.35], [0, 0, 0.5, 0]);
 
-  // Dynamic z-index - NORMAL SPEED (matching rising effect)
-  const zIndex = useTransform(scrollYProgress, [0, 0.15], [10, 60]);
+  // Dynamic z-index - FASTER SPEED
+  const zIndex = useTransform(scrollYProgress, [0, 0.12], [10, 60]);
 
-  // Circle grows in size - SLOWED DOWN to match zoom effect
-  const size = useTransform(scrollYProgress, [0.15, 0.45], [20, 800]);
+  // Circle grows in size - FASTER SPEED
+  const size = useTransform(scrollYProgress, [0.12, 0.35], [20, 800]);
 
-  // Move the box out of view - SLOWED DOWN to match zoom effect
-  const boxY = useTransform(scrollYProgress, [0.15, 0.45], [0, -700]);
+  // Move the box out of view - FASTER SPEED
+  const boxY = useTransform(scrollYProgress, [0.12, 0.35], [0, -700]);
 
   return (
     <>
@@ -35,7 +36,8 @@ const Camera = () => {
           </motion.div>
         </div>
       </motion.div>
-      {/* Circle animation (Zoom Effect) - Now faster */}
+      
+      {/* Circle animation (Zoom Effect) */}
       <motion.div
         className="fixed top-1/2 left-1/2 -translate-x-1/2 w-10 h-10 pointer-events-none"
         style={{
@@ -53,4 +55,5 @@ const Camera = () => {
     </>
   );
 };
+
 export default Camera;

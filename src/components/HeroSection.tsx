@@ -5,7 +5,7 @@ import Typewriter from './Typewriter'
 function HeroSection() {
   const { scrollYProgress } = useScroll();
 
-  const textY = useTransform(scrollYProgress, [0.15, 0.45], [-250, -900]);
+  const textY = useTransform(scrollYProgress, [0.12, 0.35], [-250, -900]);
 
   return (
     <section className="fixed top-0 left-0 h-screen flex items-center justify-center overflow-hidden w-[80%]" >
