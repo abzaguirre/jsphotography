@@ -10,7 +10,7 @@ function App() {
   return (
     <main className='relative w-full flex flex-col items-center'>
       <HeroSection />
-      <div className='relative z-10 md:mt-[250vh] mt-[300vh] w-full'>
+      <div className='relative z-10 md:mt-[250vh] mt-[350vh] w-full'>
         <AboutUs />
         <GallerySection />
         <GalleryCategories />
