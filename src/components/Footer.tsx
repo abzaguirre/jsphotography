@@ -1,5 +1,8 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import Instagram from "../assets/icons/Instagram";
+import Facebook from "../assets/icons/Facebook";
+import Tiktok from "../assets/icons/Tiktok";
 
 export default function Footer() {
     const ref = useRef(null);
@@ -9,14 +12,79 @@ export default function Footer() {
     });
 
     const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 1]);
+    const isInView = useInView(ref, { once: false, amount: 0.2 });
 
     return (
         <motion.section
             ref={ref}
-            className="relative min-h-[30vh] flex flex-col items-center justify-center bg-gray-200"
+            className="relative h-[30vh] flex flex-wrap md:flex-nowrap items-center justify-center gap-x-96"
             style={{ opacity }}
         >
-            <h2 className="text-4xl font-bold">Footer</h2>
-        </motion.section>
+            <div className="w-1/2 h-full flex justify-center">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                    transition={{ duration: 0.5 }}
+                    className="w-1/4 bg-blue-500 h-3/4"
+                >
+                    <h1>logo</h1>
+                </motion.div>
+            </div>
+            <div className="w-1/2 bg-blue min-h-full">
+                <motion.h2
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-2xl md:text-3xl font-bold leading-tight tracking-tight"
+                >
+                    Follow us on
+                </motion.h2>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                    transition={{ duration: 0.5 }}
+                    className="flex gap-x-10 justify-center mt-10 space-y-10"
+                >
+                    <a
+                        href="https://www.instagram.com/yourusername"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Instagram"
+                        className="inline-flex items-center justify-center w-12 h-12 transition-transform duration-300 hover:scale-110"
+
+                    >
+                        <Instagram />
+                    </a>
+                    <a
+                        href="https://www.instagram.com/yourusername"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Facebook"
+                        className="inline-flex items-center justify-center w-12 h-12 transition-transform duration-300 hover:scale-110"
+
+                    >
+                        <Facebook />
+                    </a>     <a
+                        href="https://www.instagram.com/yourusername"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Facebook"
+                        className="inline-flex items-center justify-center w-12 h-12 transition-transform duration-300 hover:scale-110"
+
+                    >
+                        <Tiktok />
+                    </a>
+
+                </motion.div>
+                <motion.span
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                    transition={{ duration: 0.5 }}
+                    className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground mb-3 tracking-wide"
+                >
+                    COPYRIGHTS © 2025 | JAMES SINCUYA
+                </motion.span>
+            </div>
+        </motion.section >
     );
 }

@@ -4,14 +4,16 @@ import { Label } from "./components/ui/label";
 import { Input } from "./components/ui/input";
 import { Textarea } from "./components/ui/textarea";
 import CheckCircleIcon from "../assets/icons/CheckCircleIcon";
+import emailjs from '@emailjs/browser';
+import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 
 export default function ContactUs() {
     const ref = useRef<HTMLElement>(null);
     const formRef = useRef<HTMLFormElement>(null);
     const [formState, setFormState] = useState<"idle" | "submitting" | "success" | "error">("idle");
     const [formData, setFormData] = useState({
-        name: "",
-        email: "",
+        from_name: "",
+        reply_to: "",
         message: ""
     });
 
@@ -69,7 +71,8 @@ export default function ContactUs() {
     // Handle form input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+
+        setFormData(prev => ({ ...prev, [name]: name === "from_name" ? capitalizeFirstLetter(value) : value }));
     };
 
     // Handle form submission with animation
@@ -77,20 +80,26 @@ export default function ContactUs() {
         e.preventDefault();
         setFormState("submitting");
 
-        // Simulate API call
-        try {
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            setFormState("success");
-            // Reset form after success
-            setTimeout(() => {
-                setFormData({ name: "", email: "", message: "" });
-                setFormState("idle");
-            }, 3000);
-        } catch (error) {
-            console.log(error, "error")
-            setFormState("error");
-            setTimeout(() => setFormState("idle"), 3000);
-        }
+        emailjs
+            .sendForm('service_shwsunk', 'template_kmnpzoy', formRef.current!, {
+                publicKey: 'piW3BLfqD5fKEa9gC',
+            })
+            .then(
+                () => {
+                    new Promise(resolve => setTimeout(resolve, 1500));
+                    setFormState("success");
+                    // Reset form after success
+                    setTimeout(() => {
+                        setFormData({ from_name: "", reply_to: "", message: "" });
+                        setFormState("idle");
+                    }, 3000);
+                },
+                (error) => {
+                    console.log(error, "error")
+                    setFormState("error");
+                    setTimeout(() => setFormState("idle"), 3000);
+                },
+            );
     };
 
     return (
@@ -124,7 +133,7 @@ export default function ContactUs() {
                         className="text-muted-foreground mt-3 max-w-2xl text-left"
                     >
                         I am available for bookings. For more information on rates and availability,
-                        please send an email to <span className="text-primary font-medium italic">jsincuya@gmail.com</span> or complete the form below.
+                        please send an email to <span className="text-primary font-medium italic">booking@jsincuya.com</span> or complete the form below.
                     </motion.p>
                 </div>
 
@@ -173,8 +182,8 @@ export default function ContactUs() {
                                             </Label>
                                             <Input
                                                 id="name"
-                                                name="name"
-                                                value={formData.name}
+                                                name="from_name"
+                                                value={formData.from_name}
                                                 onChange={handleInputChange}
                                                 className="h-12"
                                                 required
@@ -188,9 +197,9 @@ export default function ContactUs() {
                                             </Label>
                                             <Input
                                                 id="email"
-                                                name="email"
+                                                name="reply_to"
                                                 type="email"
-                                                value={formData.email}
+                                                value={formData.reply_to}
                                                 onChange={handleInputChange}
                                                 className="h-12"
                                                 required
@@ -211,6 +220,7 @@ export default function ContactUs() {
                                             className="min-h-[160px] resize-none"
                                             required
                                             placeholder="Tell us what you're looking for"
+                                            minLength={10}
                                         />
                                     </motion.div>
                                     <motion.div variants={itemVariants} className="pt-2">
