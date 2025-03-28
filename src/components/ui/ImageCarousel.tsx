@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import Image from 'next/image';
 
 interface Image {
     src: string;
@@ -11,19 +12,23 @@ interface Image {
 }
 
 interface ImageCarouselProps {
+    type: "GALLERY" | "CATEGORY";
     images: Image[];
     initialIndex: number;
     isOpen: boolean;
     onClose: () => void;
 }
 
-const ImageCarousel = ({ images, initialIndex, isOpen, onClose }: ImageCarouselProps) => {
-    const [currentIndex, setCurrentIndex] = useState(initialIndex);
+const ImageCarousel = ({ type, images, initialIndex, isOpen, onClose }: ImageCarouselProps) => {
+    const [currentIndex, setCurrentIndex] = useState(type === "GALLERY" ? initialIndex : 0);
     const [direction, setDirection] = useState(0);
 
-    useEffect(() => {
-        setCurrentIndex(initialIndex);
-    }, [initialIndex]);
+
+    const navigateImages = useCallback((dir: number) => {
+        setDirection(dir);
+        const newIndex = (currentIndex + dir + images.length) % images.length;
+        setCurrentIndex(newIndex);
+    }, [currentIndex, images.length]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -49,13 +54,8 @@ const ImageCarousel = ({ images, initialIndex, isOpen, onClose }: ImageCarouselP
             window.removeEventListener('keydown', handleKeyDown);
             document.body.style.overflow = '';
         };
-    }, [isOpen, currentIndex]);
+    }, [isOpen, currentIndex, onClose, navigateImages]);
 
-    const navigateImages = (dir: number) => {
-        setDirection(dir);
-        const newIndex = (currentIndex + dir + images.length) % images.length;
-        setCurrentIndex(newIndex);
-    };
 
     if (!isOpen) return null;
     const variants = {
@@ -115,15 +115,14 @@ const ImageCarousel = ({ images, initialIndex, isOpen, onClose }: ImageCarouselP
                         className="absolute w-full h-full flex items-center justify-center p-4 md:p-12"
                     >
                         <div className="relative max-w-5xl max-h-full">
-                            <img
+                            <Image
                                 src={images[currentIndex].src}
                                 alt={images[currentIndex].alt}
+                                width="1000"
+                                height="500"
                                 className="object-contain max-h-[85vh] w-auto mx-auto rounded-lg shadow-2xl"
                             />
                             <div className="absolute bottom-0 left-0 right-0 text-white p-4 rounded-b-lg" style={{ background: "rgba(0,0,0,0.8)" }}>
-                                <p className="text-center font-medium">
-                                    {images[currentIndex].alt}
-                                </p>
                                 <p className="text-center text-sm mt-1">
                                     {currentIndex + 1} / {images.length}
                                 </p>

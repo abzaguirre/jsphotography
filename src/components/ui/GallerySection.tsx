@@ -1,14 +1,23 @@
 "use client"
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import ImageCarousel from "./ImageCarousel";
-import { galleryImages } from "@/constants/gallery";
+
+type ImageType = {
+    src: string;
+    width: string;
+    height: string;
+    alt: string;
+    className: string;
+};
+
 
 const GallerySection = () => {
     const ref = useRef(null);
     const [carouselOpen, setCarouselOpen] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+    const [galleryPhotos, setGalleryPhotos] = useState<ImageType[]>([])
 
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -44,6 +53,24 @@ const GallerySection = () => {
         setSelectedImageIndex(index);
         setCarouselOpen(true);
     };
+
+
+    useEffect(() => {
+        fetch(`/api/gallery`)
+            .then((res) => res.json())
+            .then((data: Record<string, string[]>) => {
+                const orientation = ["row-span-1", "row-span-2", ""];
+
+                const imageArray = Object.values(data).flat().map((img: string) => ({
+                    src: img,
+                    width: "1000",
+                    height: "100",
+                    alt: "",
+                    className: orientation[Math.floor(Math.random() * orientation.length)],
+                }));
+                setGalleryPhotos(imageArray);
+            });
+    }, []);
 
     return (
         <motion.section
@@ -87,7 +114,7 @@ const GallerySection = () => {
                     animate={isInView ? "visible" : "hidden"}
                     className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
                 >
-                    {galleryImages.map((image, index) => (
+                    {galleryPhotos.map((image, index) => (
                         <motion.div
                             key={index}
                             variants={itemVariants}
@@ -112,9 +139,6 @@ const GallerySection = () => {
                                     whileHover={{ opacity: 1 }}
                                 >
                                     <div className="p-4 text-white bg-gradient-to-t from-black/60 to-transparent w-full">
-                                        <p className="font-medium text-sm md:text-base">
-                                            {image.alt}
-                                        </p>
                                         <p className="text-xs text-white/80 mt-1">
                                             Click to view
                                         </p>
@@ -129,7 +153,8 @@ const GallerySection = () => {
             <AnimatePresence>
                 {carouselOpen && (
                     <ImageCarousel
-                        images={galleryImages}
+                        type="GALLERY"
+                        images={galleryPhotos}
                         initialIndex={selectedImageIndex}
                         isOpen={carouselOpen}
                         onClose={() => setCarouselOpen(false)}

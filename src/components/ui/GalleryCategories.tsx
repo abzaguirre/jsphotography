@@ -1,17 +1,21 @@
 "use client"
 
 import { AnimatePresence, motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
-import hero from "@/assets/images/hero_img.jpg";
+import { useEffect, useRef, useState } from "react";
 import ImageCarousel from "./ImageCarousel";
-import { galleryImages } from "@/constants/gallery";
 import Image from "next/image";
+import { capitalizeFirstLetter } from "@/lib/capitalizeFirstLetter";
+
+type CategoryImages = Record<string, { src: string; width: string; height: string, alt: string }[]>;
+
 
 function GalleryCategories() {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: false, amount: 0.2 });
     const [carouselOpen, setCarouselOpen] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+    const [selectedImageCategory, setSelectedImageCategory] = useState("");
+    const [categories, setCategories] = useState<CategoryImages>({})
 
     const containerVariants = {
         hidden: { opacity: 0, y: 20 },
@@ -27,10 +31,28 @@ function GalleryCategories() {
         visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
     };
 
-    const handleImageClick = (index: number) => {
+    const handleImageClick = (index: number, category: string) => {
         setSelectedImageIndex(index);
+        setSelectedImageCategory(category);
         setCarouselOpen(true);
     };
+
+
+    useEffect(() => {
+        fetch(`/api/categories`)
+            .then((res) => res.json())
+            .then((data: Record<string, string[]>) => {
+                const formattedData = Object.fromEntries(
+                    Object.entries(data).map(([category, images]) => [
+                        category,
+                        images.map((img: string) => ({ src: img, width: "1000", height: "100", alt: "" })),
+                    ])
+                );
+                setCategories(formattedData);
+            });
+    }, []);
+
+
 
     return (
         <motion.div
@@ -40,29 +62,28 @@ function GalleryCategories() {
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
         >
-            {Array(3)
-                .fill("")
-                .map((_, index) => (
+            {Object.keys(categories)
+                .map((category: string, index: number) => (
                     <div
                         key={index}
-                        className="md:w-1/3 pb-20" // Ensures each item takes up 33% width
-
+                        className="md:w-1/3 mt-20 mb-10"
                     >
                         <motion.div
-                            onClick={() => handleImageClick(index)}
+                            onClick={() => handleImageClick(index, category)}
                             className="relative overflow-hidden rounded-lg group border-2 border-white max-w-[60%] mx-auto aspect-[9/16] cursor-pointer group"
                             variants={itemVariants} // Apply animation to each item
                             whileHover={{ y: -5 }}
                             whileTap={{ scale: 0.98 }}>
-                            {/* Make the image container thinner with max-width and margin auto */}
                             <Image
-                                src={hero}
-                                alt="hehehe"
+                                src={categories[category][0].src}
+                                width="1000"
+                                height="100"
+                                alt={capitalizeFirstLetter(category)}
                                 className="w-full h-full object-cover transition-transform duration-500"
                             />
                             <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-55 transition-opacity duration-300 flex items-end">
-                                <p className="text-white p-4 text-sm md:text-base font-medium">
-                                    hehehe
+                                <p className="text-white p-4 text-2xl md:text-2xl font-medium">
+                                    {capitalizeFirstLetter(category)}
                                 </p>
                             </div>
                         </motion.div>
@@ -71,7 +92,8 @@ function GalleryCategories() {
             <AnimatePresence>
                 {carouselOpen && (
                     <ImageCarousel
-                        images={galleryImages}
+                        type="CATEGORY"
+                        images={categories[selectedImageCategory]}
                         initialIndex={selectedImageIndex}
                         isOpen={carouselOpen}
                         onClose={() => setCarouselOpen(false)}
