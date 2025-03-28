@@ -11,8 +11,8 @@ export default function Home() {
       <HeroSection />
       <div className='relative z-10 md:mt-[250vh] mt-[350vh] w-full'>
         <AboutUs />
-        <GallerySection />
         <GalleryCategories />
+        <GallerySection />
         <ContactUs />
         <Footer />
       </div>

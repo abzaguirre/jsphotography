@@ -22,6 +22,7 @@ export default function Typewriter({ value, className, textY }: { value: string,
         }, 100);
         return () => clearInterval(interval);
     }, [value]);
+    
     useEffect(() => {
         const cursorInterval = setInterval(() => {
             setShowCursor((prev) => !prev);
