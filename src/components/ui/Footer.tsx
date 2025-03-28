@@ -5,7 +5,7 @@ import Instagram from "@/assets/icons/Instagram";
 import Tiktok from "@/assets/icons/Tiktok";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Footer() {
     const ref = useRef(null);
@@ -16,6 +16,17 @@ export default function Footer() {
 
     const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 1]);
     const isInView = useInView(ref, { once: false, amount: 0.2 });
+    const [imgLogo, setImgLogo] = useState("logo")
+
+    useEffect(() => {
+        fetch("/api/logo") // Call your API
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.logo)
+                    setImgLogo(data.logo); // Set the logo URL
+            })
+            .catch((error) => console.error("Error fetching logo:", error));
+    }, []);
 
     return (
         <motion.section
@@ -24,14 +35,14 @@ export default function Footer() {
             style={{ opacity }}
         >
             <div className="w-1/2 h-full flex justify-center">
-                <motion.div
+                <motion.img
                     initial={{ opacity: 0, y: 20 }}
                     animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                     transition={{ duration: 0.5 }}
-                    className="w-1/4 bg-blue-500 h-3/4"
-                >
-                    <h1>logo</h1>
-                </motion.div>
+                    className="w-1/4 h-3/4"
+                    alt="Logo"
+                    src={imgLogo}
+                />
             </div>
             <div className="w-1/2 bg-blue min-h-full flex flex-col items-center">
                 <motion.h2

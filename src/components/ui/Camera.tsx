@@ -26,7 +26,6 @@ const Camera = () => {
 
   useEffect(() => {
     const unsubscribe = scrollYProgress.on("change", (latest) => {
-      console.log(latest)
       if (latest > 0.01) {
         setBagSrc("/camera-bag-open.png"); // Change to open bag
       } else {
