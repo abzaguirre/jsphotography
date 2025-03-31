@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "JSincuya Photography",
   description: "JSincuya Photography",
+  icons: "/favicon.ico",
 };
 
 export default function RootLayout({
