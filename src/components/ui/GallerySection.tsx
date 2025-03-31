@@ -1,23 +1,15 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import ImageCarousel from "./ImageCarousel";
-
-type ImageType = {
-    src: string;
-    width: string;
-    height: string;
-    alt: string;
-    className: string;
-};
+import { TImage } from "@/models/image";
 
 
-const GallerySection = () => {
+const GallerySection = ({ galleryPhotos }: { galleryPhotos: TImage[] }) => {
     const ref = useRef(null);
     const [carouselOpen, setCarouselOpen] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-    const [galleryPhotos, setGalleryPhotos] = useState<ImageType[]>([])
 
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -53,24 +45,6 @@ const GallerySection = () => {
         setSelectedImageIndex(index);
         setCarouselOpen(true);
     };
-
-
-    useEffect(() => {
-        fetch(`/api/gallery`)
-            .then((res) => res.json())
-            .then((data: Record<string, string[]>) => {
-                const orientation = ["row-span-1", "row-span-2", ""];
-
-                const imageArray = Object.values(data).flat().map((img: string) => ({
-                    src: img,
-                    width: "1000",
-                    height: "100",
-                    alt: "",
-                    className: orientation[Math.floor(Math.random() * orientation.length)],
-                }));
-                setGalleryPhotos(imageArray);
-            });
-    }, []);
 
     return (
         <motion.section

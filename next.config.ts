@@ -1,9 +1,6 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   images: {
-    domains: [], // Ensure this is empty if only using local images
-    unoptimized: true, // Try setting this if using local images without an external image loader
+    unoptimized: true, // Disable Next.js Image Optimization
   },
+  trailingSlash: true, // Ensure all paths have a trailing slash
 };
-
-module.exports = nextConfig;
