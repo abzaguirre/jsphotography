@@ -1,7 +1,12 @@
 module.exports = {
   output: "export",
   images: {
-    unoptimized: true, // Disable Next.js Image Optimization
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "drive.google.com", // Allow drive.google.com
+        pathname: "/uc", // Ensure it works with the export=view
+      },
+    ],
   },
-  trailingSlash: true, // Ensure all paths have a trailing slash
 };
