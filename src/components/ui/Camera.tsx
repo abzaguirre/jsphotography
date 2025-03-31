@@ -50,11 +50,13 @@ const Camera = () => {
               alt="Camera Bag"
               layout="fill" // Make it fill the div
               objectFit="contain" // Ensures the image scales properly
+              unoptimized={true}
             />
           </div>
           {/* Camera appears from inside the box */}
           <motion.div style={{ y: cameraY, zIndex: "-999" }}>
-            <Image src="/camera.png" alt="Camera" width={120} height={100} />
+            <Image src="/camera.png" alt="Camera" width={120} height={100}
+              unoptimized={true} />
           </motion.div>
         </div>
       </motion.div>
