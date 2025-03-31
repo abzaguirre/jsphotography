@@ -1,0 +1,13 @@
+{
+    "events": [
+        "event1.jpg",
+        "event2.jpg"
+    ],
+    "outdoor": [
+        "hero_img.jpg",
+        "outdoor1.jpg"
+    ],
+    "studio": [
+        "studio1.jpg"
+    ]
+}

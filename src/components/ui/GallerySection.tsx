@@ -1,15 +1,16 @@
 "use client"
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import ImageCarousel from "./ImageCarousel";
 import { TImage } from "@/models/image";
 
 
-const GallerySection = ({ galleryPhotos }: { galleryPhotos: TImage[] }) => {
+const GallerySection = () => {
     const ref = useRef(null);
     const [carouselOpen, setCarouselOpen] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+    const [galleryPhotos, setGalleryPhotos] = useState<TImage[]>([]);
 
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -45,6 +46,35 @@ const GallerySection = ({ galleryPhotos }: { galleryPhotos: TImage[] }) => {
         setSelectedImageIndex(index);
         setCarouselOpen(true);
     };
+
+    useEffect(() => {
+        const fetchImages = async () => {
+            try {
+                const response = await fetch("/uploads/gallery/gallery.json");
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log("Fetched Data:", data); // Check if data is being received
+
+                const orientation = ["row-span-1", "row-span-2", ""];
+                const images = data.map((src: string) => ({
+                    src,
+                    width: "1000",
+                    height: "100",
+                    alt: "",
+                    className: orientation[Math.floor(Math.random() * orientation.length)],
+                }));
+
+                console.log("Processed Images:", images); // Should log the array
+                setGalleryPhotos(images);
+            } catch (error) {
+                console.error("Error fetching images:", error);
+            }
+        };
+
+        fetchImages();
+    }, []);
 
     return (
         <motion.section

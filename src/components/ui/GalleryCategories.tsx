@@ -1,22 +1,20 @@
 "use client";
 
 import { AnimatePresence, motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ImageCarousel from "./ImageCarousel";
 import Image from "next/image";
 import { capitalizeFirstLetter } from "@/lib/capitalizeFirstLetter";
 import { TImage } from "@/models/image";
 
 
-type CategoryImages = Record<string, TImage[]>;
-
-function GalleryCategories({ categories }: { categories: CategoryImages }) {
+function GalleryCategories() {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: false, amount: 0.2 });
     const [carouselOpen, setCarouselOpen] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [selectedImageCategory, setSelectedImageCategory] = useState("");
-
+    const [categories, setCategories] = useState<Record<string, TImage[]>>({})
     const containerVariants = {
         hidden: { opacity: 0, y: 20 },
         visible: {
@@ -36,6 +34,38 @@ function GalleryCategories({ categories }: { categories: CategoryImages }) {
         setSelectedImageCategory(category);
         setCarouselOpen(true);
     };
+
+    useEffect(() => {
+        const fetchImages = async () => {
+            try {
+                const response = await fetch("/uploads/categories/categories.json");
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data: Record<string, string[]> = await response.json();
+                const orientation = ["row-span-1", "row-span-2", ""];
+                const formattedCategories: Record<string, TImage[]> = {};
+
+                Object.entries(data).forEach(([category, files]) => {
+                    formattedCategories[category] = files.map((file) => ({
+                        src: `/uploads/categories/${category}/${file}`,
+                        width: "1000",
+                        height: "100",
+                        alt: category,
+                        className: orientation[Math.floor(Math.random() * orientation.length)],
+                    }));
+                });
+
+                console.log("Processed Images:", formattedCategories);
+                setCategories(formattedCategories);
+            } catch (error) {
+                console.error("Error fetching images:", error);
+            }
+        };
+
+        fetchImages();
+    }, []);
+
 
     return (
         <motion.div

@@ -1,4 +1,5 @@
 module.exports = {
+  output: "export",
   images: {
     unoptimized: true, // Disable Next.js Image Optimization
   },
