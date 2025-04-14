@@ -45,7 +45,6 @@ function GalleryCategories() {
           return;
         }
 
-        // Step 1: Fetch all subfolders inside the categories folder
         const subfolderResponse = await fetch(
           `https://www.googleapis.com/drive/v3/files?q='${categoriesFolderId}'+in+parents+and+mimeType='application/vnd.google-apps.folder'&key=${apiKey}&fields=files(id,name)`
         );
@@ -58,7 +57,6 @@ function GalleryCategories() {
 
         const categoriesFolder: Record<string, TImage[]> = {};
 
-        // Step 2: Loop through each subfolder and fetch images
         for (const subfolder of subfolderData.files) {
           const subfolderId = subfolder.id; // Get subfolder ID
           const subfolderName = subfolder.name.toLowerCase(); // Use folder name as key
