@@ -43,6 +43,12 @@ const Index = () => {
     }),
   };
 
+  const aboutDescription = [
+    "Hey there! I’m James, a passionate photographer with a some years of experience exploring the art of photography as a hobby. I love capturing the beauty in everyday moments, whether it’s landscapes, portraits, or candid shots.",
+    "Join me on this journey as I learn, grow, and share my passion for photography! I’m excited to connect with fellow photography enthusiasts and exchange tips, inspiration, and ideas. Let’s create something beautiful together!",
+    "Feel free to reach out or follow my journey. Happy shooting!",
+  ];
+
   return (
     <div className="min-h-screen overflow-hidden">
       <motion.section
@@ -110,7 +116,7 @@ const Index = () => {
               Hi, I am James.
             </motion.h2>
 
-            {[0, 1, 2].map((index) => (
+            {aboutDescription.map((item, index) => (
               <motion.p
                 key={index}
                 custom={index + 1}
@@ -119,10 +125,7 @@ const Index = () => {
                 variants={textVariants}
                 className="text-neutral-400"
               >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                {index === 0 &&
-                  " Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."}
+                {item}
               </motion.p>
             ))}
           </motion.div>
